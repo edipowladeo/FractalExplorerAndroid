@@ -1,0 +1,80 @@
+Index: app/src/main/assets/shaders/RawTextureFragment.glsl
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/assets/shaders/RawTextureFragment.glsl	(date 1588568457847)
++++ app/src/main/assets/shaders/RawTextureFragment.glsl	(date 1588568457847)
+@@ -1,4 +1,4 @@
+-//#version 120
++#version 320 es
+ 
+ #if __VERSION__ < 130
+ #define TEXTURE2D texture2D
+@@ -7,22 +7,27 @@
+ #endif
+ 
+ precision highp float;
++//precision highp samplerBuffer;
+ 
++uniform highp usamplerBuffer u_TextureBuffer;    // The input texture.
+ uniform sampler2D u_Texture;    // The input texture.
++
+ uniform float u_tempo;
+ uniform float u_escalaPaleta;
+ 
+-varying vec2 v_TexturePosition;		// Interpolated position for this fragment.
+-varying vec4 v_Color;
++in vec2 v_TexturePosition;		// Interpolated position for this fragment.
++in vec4 v_Color;
+ 
+-vec4 paleta(int iteracoes,float deltaT){
++out vec4 fragColor;
++
++vec4 paleta(uint iteracoes,float deltaT){
+     vec4 cor;
+     cor.a = 1.0;
+-    if (iteracoes == 0) return cor;
++    if (iteracoes == 0u) return cor;
+     float iteracoesFloat = float(iteracoes);
+  iteracoesFloat/=u_escalaPaleta;
+  //   iteracoesFloat *= 6.2/256.0;
+-    iteracoesFloat+=deltaT;
++   // iteracoesFloat+=deltaT;
+ 
+     cor.r = 0.5+0.5*sin(iteracoesFloat);
+     cor.g = 0.5+0.5*sin(iteracoesFloat+2.0);
+@@ -31,22 +36,24 @@
+     return cor;
+ }
+ 
+-int getI(float valueF){
+-    return int(valueF*256.0);
+-}
+-
+ void main()
+ {
+     vec4 texcolor = TEXTURE2D(u_Texture, v_TexturePosition.xy);
+     vec4 outputcolor = vec4(0.0,0.0,0.0,1.0);
+ 
+-    int valor_inteiro = getI(texcolor.a);
+-    valor_inteiro += getI(texcolor.g)*256;
+-    valor_inteiro += getI(texcolor.b)*65536;
+-    valor_inteiro += getI(texcolor.a)*16777216;
+ 
++    float multiplicador = 32.0;
++    int x = int(v_TexturePosition.x*multiplicador);
++    int y = int(v_TexturePosition.y*multiplicador);
++    int pidex = y*int(multiplicador)+x;
++    uvec4 tex = texelFetch(u_TextureBuffer,pidex);
++    uint valor_inteiro = tex.r;
++  //  valor_inteiro += tex.g*256u;
++  //  valor_inteiro += tex.b*65536u;
++  //  valor_inteiro += tex.a*16777216u;
+     outputcolor = paleta(valor_inteiro,u_tempo);
+-    gl_FragColor = outputcolor;
++
++    fragColor = outputcolor;
+ 
+ 
+ //gl_FragColor = color;
