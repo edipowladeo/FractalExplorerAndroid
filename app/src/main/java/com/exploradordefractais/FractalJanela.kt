@@ -33,7 +33,7 @@ import kotlin.math.truncate
  * somente caso esteja muito lento (profiling) seria a ultima coisa a fazer
   */
 @RequiresApi(Build.VERSION_CODES.N)
-class FractalJanela(val resources:FractalResources) : FractalJanelaPropriedades() {
+class FractalJanela(val resources:FractalResources, val tamSprite:Cvetor2i) : FractalJanelaPropriedades() {
 
     var qtdeCelulas = 0;
 
@@ -55,53 +55,12 @@ class FractalJanela(val resources:FractalResources) : FractalJanelaPropriedades(
 
     var coordenadasDaJanelaPlano = CoordenadasPlano(0.0,0.0)
 
-
-    val poolTexturas =
-        PoolDeObjetosAlocaveis<TextureWrapperImpl>(
-            fun(): TextureWrapperImpl {
-                var textura = TextureWrapperImpl(tamSprite.x, tamSprite.y)
-                this.tarefasAlocarTextura.add(
-                    TarefaAlocarTexturas(
-                        textura
-                    )
-                )
-                return textura
-            },
-            10, 2000, 1L
-        )
-
-
-    val poolIteracoesByteBuffer =
-        PoolDeObjetos<ByteBuffer>(
-            fun(): ByteBuffer {
-                return ByteBuffer.allocateDirect(
-                    tamSprite.x * tamSprite.y * entriesPerPixel
-                )
-                    .order(ByteOrder.nativeOrder())
-            },
-            100, 2000, 1L
-        )
-
-    val poolIteracoesByteArray =
-        PoolDeObjetos<ByteArray>(
-            fun(): ByteArray {
-                return ByteArray(tamSprite.x * tamSprite.y * bytesPerEntry * entriesPerPixel)
-            },
-            2, 20, 1L
-        )
-
-    val poolIteracoesArrayIteracoes =
-        PoolDeObjetos<ArrayIteracoes>(
-            fun(): ArrayIteracoes { return ArrayIteracoes(tamSprite.x * tamSprite.y) { 0 } },
-            100, 2000, 1L
-        )
-
     /** key da camada é o valor de magnificação*/
     /** quanto maior, menor é o tamanho aparente da camada e portanto maior resolução  qualidade aparente */
     /** valores menores representam baixa resolucao, e são processados e desenhados primeiro e portanto ficam atrás*/
     var camadas: SortedMap<Int, Camada> = emptyMap<Int, Camada>().toSortedMap()
 
-   // constructor(parcel: Parcel,resources: FractalResources) : this(resources) {}
+//    constructor(parcel: Parcel,resources: FractalResources) : this(resources) {}
 
     init {
         Log.i("Janela","nova instancia !")

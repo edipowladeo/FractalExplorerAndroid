@@ -9,15 +9,15 @@ import java.util.concurrent.locks.ReentrantLock
 class Celula(val camada: Camada, val coordenadasPlano: CoordenadasPlano, val tamTextura: Cvetor2i) {
 
 
-    var textura = camada.fractalJanela.poolTexturas.emprestaObjeto()
+    var textura = camada.fractalJanela.resources.poolTexturas.emprestaObjeto()
 
     val texturaLock = ReentrantLock()
 
     /**matriz de iteracoes*/ //TODO: remover transferencias de containers
-    var iteracoes = camada.fractalJanela.poolIteracoesArrayIteracoes.emprestaObjeto()
+    var iteracoes = camada.fractalJanela.resources.poolIteracoesArrayIteracoes.emprestaObjeto()
 
     /**byteBuffer usado para criar texturas*/
-    var iteracoesByteBuffer = camada.fractalJanela.poolIteracoesByteBuffer.emprestaObjeto()
+    var iteracoesByteBuffer = camada.fractalJanela.resources.poolIteracoesByteBuffer.emprestaObjeto()
 
     /**ativa caso a já possui todos recursos devolvidos para o pool
      * os recursos podem estar em uso por outra célula portanto nao devem ser utilizados*/
@@ -52,14 +52,14 @@ class Celula(val camada: Camada, val coordenadasPlano: CoordenadasPlano, val tam
 
     /** usado caso o contexto opencl seja resetado*/
     fun solicitarGeracaoDeTexturaGL(){
-        camada.fractalJanela.tarefasAlocarTextura.add(TarefaAlocarTexturas(this.textura))
-        camada.fractalJanela.tarefasPopularTextura.add(TarefaPopularTexturaGL(this))
+        camada.fractalJanela.resources.tarefasAlocarTextura.add(TarefaAlocarTexturas(this.textura))
+        camada.fractalJanela.resources.tarefasPopularTextura.add(TarefaPopularTexturaGL(this))
     }
 
     fun ProcessaMandelbrotECriaTextura(){
         PopulateLocalArrayWithFractal()
         transfereIteracoesParaBytebuffer()
-        camada.fractalJanela.tarefasPopularTextura.add(
+        camada.fractalJanela.resources.tarefasPopularTextura.add(
             TarefaPopularTexturaGL(
                 this
             )
@@ -69,10 +69,10 @@ class Celula(val camada: Camada, val coordenadasPlano: CoordenadasPlano, val tam
     @ExperimentalUnsignedTypes
     fun transfereIteracoesParaBytebuffer(){
 //TODO: APENAS PARA TESTE, muito overload
-        val poolIteracoesByteArray = camada.fractalJanela.poolIteracoesByteArray
+        val poolIteracoesByteArray = camada.fractalJanela.resources.poolIteracoesByteArray
 
         val byteArray= poolIteracoesByteArray.emprestaObjeto().also{
-            val entriesPerPixel =camada.fractalJanela.entriesPerPixel
+            val entriesPerPixel =camada.fractalJanela.resources.entriesPerPixel
             iteracoes.forEachIndexed{indice,valor ->
                 val indiceNaTexutraByte = indice * entriesPerPixel
                 var valorint = valor.toLong()
@@ -112,9 +112,9 @@ class Celula(val camada: Camada, val coordenadasPlano: CoordenadasPlano, val tam
       //  Log.i("Celula","Qtde Celulas: ${camada.fractalJanela.qtdeCelulas} tam pool ${camada.fractalJanela.poolTexturas.getSize()} texturas gl alocadas ${TextureWrapperImpl.totalObjetosAlocados}")
         flagMarcadaParaDestruicao = true
         camada.fractalJanela.apply {
-            poolTexturas.devolveObjeto(textura)
-            poolIteracoesArrayIteracoes.devolveObjeto(iteracoes)
-            poolIteracoesByteBuffer.devolveObjeto(iteracoesByteBuffer)
+            resources.poolTexturas.devolveObjeto(textura)
+            resources.poolIteracoesArrayIteracoes.devolveObjeto(iteracoes)
+            resources.poolIteracoesByteBuffer.devolveObjeto(iteracoesByteBuffer)
 
         }
     }

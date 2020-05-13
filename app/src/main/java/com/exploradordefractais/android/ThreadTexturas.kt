@@ -14,9 +14,9 @@ class ThreadTexturas(val fractalJanela: FractalJanela):Thread() {
     override fun run() {
         try {
             while (true) {
-                fractalJanela.tarefasDesalocarTextura.poll()?.run();
+                fractalJanela.resources.tarefasDesalocarTextura.poll()?.run();
 
-                fractalJanela.tarefasAlocarTextura.poll()?.run();
+                fractalJanela.resources.tarefasAlocarTextura.poll()?.run();
 
                 }
         } catch (e: InterruptedException) {

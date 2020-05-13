@@ -171,7 +171,7 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
         lista_texturas_local.forEach { tex ->
             resources.janela?.run {
                 lock.lock()
-                tarefasAlocarTextura.add(
+                resources.tarefasAlocarTextura.add(
                     TarefaAlocarTexturas(tex)
                 )
                 lock.unlock()
@@ -183,7 +183,7 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
         lista_texturas.forEach { textura ->
             resources.janela?.run {
                 lock.lock()
-                tarefasDesalocarTextura.add(
+                resources.tarefasDesalocarTextura.add(
                     TarefaDesalocarTexturaGL(
                         textura
                     )

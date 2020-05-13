@@ -133,7 +133,7 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
             fun ListaTarefas<TarefaPopularTexturaGL>.pollandRun(){
                 poll()?.run{
                     if (celula.textura.alocadoComSucesso())  run() //só popula a textura se ela estiver alocada
-                    else tarefasPopularTextura.add(this)// joga para o final da fila se não estiver alocado
+                    else resources.tarefasPopularTextura.add(this)// joga para o final da fila se não estiver alocado
                 }
             }
 
@@ -143,16 +143,16 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
             var tempoMs:Int =1000/FPSalvoAoManipular
 
 
-            tarefasDesalocarTextura.run { for (i in 0 until size) poll()?.run()}
-            while ((tempototal<tempoMs) and (!tarefasAlocarTextura.isEmpty())) {
+            resources.tarefasDesalocarTextura.run { for (i in 0 until size) poll()?.run()}
+            while ((tempototal<tempoMs) and (!resources.tarefasAlocarTextura.isEmpty())) {
                 tempototal = SystemClock.uptimeMillis() - tempoinicio
                 numTarefasRealizadas++
-                tarefasAlocarTextura.poll()?.run()
-                tarefasPopularTextura.pollandRun()
+                resources.tarefasAlocarTextura.poll()?.run()
+                resources.tarefasPopularTextura.pollandRun()
             }
             if (!flagCameraEstaMovendo){
-                tarefasAlocarTextura.run { for (i in 0 until size) poll()?.run()}
-                tarefasPopularTextura.run { for (i in 0 until size) pollandRun()}
+                resources.tarefasAlocarTextura.run { for (i in 0 until size) poll()?.run()}
+                resources.tarefasPopularTextura.run { for (i in 0 until size) pollandRun()}
             }
         }
     }

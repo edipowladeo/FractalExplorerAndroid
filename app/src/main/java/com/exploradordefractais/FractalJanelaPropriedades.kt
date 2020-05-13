@@ -43,45 +43,8 @@ FractalJanelaPropriedades {
 
     //var MagInicial = 15
 
-    val tamSprite = Cvetor2i(64, 64)
-
-    /** parâmetros do Bytebuffer de iteracoes e da textura OpenGL*/
-    val entriesPerPixel = 4
-    val bytesPerEntry = 1
 
 
-    /* var PosicaoInicial: CoordenadasPlanoEDelta;
 
-       telaCheia: Bool = ;
-       CVetor2i DimensoesTextura;
-       CVetor2i Recobrimento;
-       CVetor2i DimensoesMatrizCelulas;
 
-       bool DebugCamadas;
-       bool DebugCelulas;
-
-       bool UsarShader;
-
-       float NavegacaoVelocidade;
-       float NavegacaoVelocidadeZoom;
-       int   DuracaoFrameDesejada = DURACAOFRAMEDESEJADA;//ms 1/taxa de quadros
-
-       sf::Vector2f DimensoesJanelaFractal;
-       sf::Vector2f JanelaFractalDesenho;
-       sf::Vector2f JanelaFractalAlocar;
-       sf::Vector2f JanelaFractalDesalocar;
-
-       int MagAlocarMax;
-       int MagAlocarMin;
-       int MagDesalocarMax;
-       int MagDesalocarMin;
-
-       float RazaoTamJanelaFractalAlocar;
-       float RazaoTamJanelaFractalDesenho;
-       float RazaoTamJanelaFractalDesalocar;
-
-       float RazaoJanelaFractalsDebug;
-
-       CPropriedades();
-       void AtualizarLimites();*/
 }
