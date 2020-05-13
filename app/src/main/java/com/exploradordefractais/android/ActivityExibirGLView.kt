@@ -179,22 +179,6 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
         }
     }
 
-    fun desalocar(view: View) {
-        lista_texturas.forEach { textura ->
-            resources.janela?.run {
-                lock.lock()
-                resources.tarefasDesalocarTextura.add(
-                    TarefaDesalocarTexturaGL(
-                        textura
-                    )
-                )
-                lock.unlock()
-            }
-        }
-        lista_texturas.clear()
-        ////Log.i("debug texturas ","lista tamanho  " + lista_texturas.size.toString())
-    }
-
     fun atualiza_texto() {
         textView?.text = glview?.myRenderer?.textoDebug.toString()
     }

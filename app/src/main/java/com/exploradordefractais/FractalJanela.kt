@@ -39,9 +39,7 @@ class FractalJanela(val resources:FractalResources, val tamSprite:Cvetor2i) : Fr
 
     val texturaPlaceholder = TextureWrapperImpl(64, 64)  // inativo
 
-    val tarefasPopularTextura =   ListaTarefas<TarefaPopularTexturaGL>()
-    val tarefasAlocarTextura =    ListaTarefas<TarefaAlocarTexturas>()
-    val tarefasDesalocarTextura = ListaTarefas<TarefaDesalocarTexturaGL>()
+
 
     val lock = ReentrantLock()
 
@@ -250,8 +248,8 @@ class FractalJanela(val resources:FractalResources, val tamSprite:Cvetor2i) : Fr
         lock.lock()
         val stringB = StringBuilder()
         stringB.append("Dimensoes da FractalJanela: " + dimJanelaDeSaida)
-        stringB.append("\nFila Criar Textura " + tarefasAlocarTextura.size )
-        stringB.append("\nFila Desalocar Textura " + tarefasAlocarTextura.size )
+        stringB.append("\nFila Criar Textura " + resources.tarefasAlocarTextura.size )
+        stringB.append("\nFila Desalocar Textura "+ resources.tarefasAlocarTextura.size )
         //  textoDebug.append("\nmin:" +coord_min)
         //  textoDebug.append("\nmax:" +coord_max)
         stringB.append("\nCoord Camera Atual " + posicaoCameraAtual)

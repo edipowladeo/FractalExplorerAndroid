@@ -5,6 +5,7 @@ import android.opengl.GLES30
 import android.util.Log
 import com.exploradordefractais.Alocavel
 import com.exploradordefractais.TextureWrapper
+import com.exploradordefractais.runnables.TarefaDesalocarTexturaGL
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -38,11 +39,11 @@ class MyTextureWrapper(val largura:Int, val altura:Int): TextureWrapper , Alocav
     override fun desalocarTexturaGL() {
         if (textureHandle[0]==0)
         {
-            //throw RuntimeException("Tentando desalocar Textura sem handle TextureWrapper.desalocarTexturaGL()")
-            Log.i("Exceptions","Tentando desalocar Textura sem handle TextureWrapper.desalocarTexturaGL()")
+            throw RuntimeException("Tentando desalocar Textura sem handle TextureWrapper.desalocarTexturaGL()")
+           // Log.i("Exceptions","Tentando desalocar Textura sem handle TextureWrapper.desalocarTexturaGL()")
         }
         totalObjetosAlocados--
-      //  Log.i("TextureWrapper ", "Destroyed,  handle = ${textureHandle[0]}, total: ${totalObjetosAlocados}")
+        Log.i("TextureWrapper ", "Destroyed,  handle = ${textureHandle[0]}, total: ${totalObjetosAlocados}")
         GLES20.glDeleteTextures(1, textureHandle, 0)
     }
 
@@ -87,7 +88,7 @@ class MyTextureWrapper(val largura:Int, val altura:Int): TextureWrapper , Alocav
 
     }
     override fun desalocar() {
-       desalocarTexturaGL()
+        MainApplication.recursos.tarefasDesalocarTextura.add(TarefaDesalocarTexturaGL(this))
     }
 
     /** APAGAR DA INTERFACE*/
