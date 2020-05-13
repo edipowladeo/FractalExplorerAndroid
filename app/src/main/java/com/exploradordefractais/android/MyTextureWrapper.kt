@@ -36,7 +36,11 @@ class MyTextureWrapper(val largura:Int, val altura:Int): TextureWrapper , Alocav
     }
 
     override fun desalocarTexturaGL() {
-        if (textureHandle[0]==0) throw RuntimeException("Tentando desalocar Textura sem handle TextureWrapper.desalocarTexturaGL()")
+        if (textureHandle[0]==0)
+        {
+            //throw RuntimeException("Tentando desalocar Textura sem handle TextureWrapper.desalocarTexturaGL()")
+            Log.i("Exceptions","Tentando desalocar Textura sem handle TextureWrapper.desalocarTexturaGL()")
+        }
         totalObjetosAlocados--
       //  Log.i("TextureWrapper ", "Destroyed,  handle = ${textureHandle[0]}, total: ${totalObjetosAlocados}")
         GLES20.glDeleteTextures(1, textureHandle, 0)

@@ -2,9 +2,10 @@ package com.exploradordefractais.android
 
 import android.app.Application
 import android.content.Context
+import com.exploradordefractais.FractalResources
 
 /** TODO FOR NEXT RELEASE:
- * TODO: BUG: Realocating and populating Textures when losing opengl context
+ * TODO: regenAllTextures causes flickering at startup
  * TODO: separate rendering, processing, erasing regions.
  */
 
@@ -33,7 +34,7 @@ class MainApplication : Application() {
 
     companion object {
         private lateinit var instance: MainApplication
-
+        val recursos=  FractalResources()
         fun applicationContext() : Context {
             return instance.applicationContext
         }

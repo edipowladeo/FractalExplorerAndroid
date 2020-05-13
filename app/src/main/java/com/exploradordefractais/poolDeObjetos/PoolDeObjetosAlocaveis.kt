@@ -96,4 +96,20 @@ class PoolDeObjetosAlocaveis<T: Alocavel>(val construtorDoObjeto:()->T) {
     fun getSize():Int{
         return pool.size
     }
+
+    fun setSize(newSize:Int){
+        val size: Int = pool.size
+        if (size < newSize) {
+            val sizeToBeAdded = newSize - size
+            for (i in 0 until sizeToBeAdded) {
+                pool.add(construtorDoObjeto())
+            }
+        } else if (size > newSize) {
+            val sizeToBeRemoved = size - newSize
+            //       Log.i("PoolDeObjetosAlocaveis", "Removendo ${sizeToBeRemoved} itens")
+            for (i in 0 until sizeToBeRemoved) {
+                pool.poll()?.desalocar()
+            }
+        }
+    }
 }

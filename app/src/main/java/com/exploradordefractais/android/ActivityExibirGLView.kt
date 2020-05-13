@@ -30,7 +30,7 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
     var textView: TextView? = null
     lateinit var glview: MyGLSurfaceView
 
-    var resources = FractalResources()
+    var resources = MainApplication.recursos
 
     private lateinit var myGLSurfaceView: MyGLSurfaceView
 

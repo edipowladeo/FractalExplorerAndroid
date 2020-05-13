@@ -36,6 +36,7 @@ class FractalResources {
         )
 
 
+   // TODO: java.lang.OutOfMemoryError
     val poolIteracoesByteBuffer =
         PoolDeObjetos<ByteBuffer>(
             fun(): ByteBuffer {
@@ -63,5 +64,20 @@ class FractalResources {
 
     @RequiresApi(Build.VERSION_CODES.N)
     val janela = FractalJanela(this,tamSprite)
+
+    fun regenAllTextures(){
+        janela.run{
+            camadas.forEach { (t, camada) ->
+                camada.Celulas.forEachIndexed{i , colunas ->
+                    colunas.forEachIndexed(){j, linhas ->
+                        linhas.run{
+                                        solicitarGeracaoDeTexturaGL()
+                        }
+                    }
+                }
+            }
+        }
+        poolTexturas.setSize(0)//Erase all objects from objectPool.
+    }
 
 }

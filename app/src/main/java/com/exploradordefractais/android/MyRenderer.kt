@@ -25,7 +25,7 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
         ouvinte = Ouvinte
     }
 
-    var fractalResourcesResources: FractalResources? = null
+    var fractalResourcesResources: FractalResources? = MainApplication.recursos
 
     var mProgramHandle = 0
     var mTextureUniformHandle = 0
@@ -81,6 +81,7 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
+
         myGlProgram = MyGLProgram(
             context,
             "shaders/TextureWrapperVertex.glsl",
@@ -175,8 +176,8 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         GLES20.glViewport(0, 0, width, height)
 
-
         fractalResourcesResources!!.janela.let{
+           it.flagCameraEstaMovendo = true
         it.setDimensaoDaJanelaDeSaida(
             CoordenadasTela(
                 width.toDouble(),
@@ -184,25 +185,14 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
             )
         )
             //Log.i("Renderer", "fractalJanela ${largura} x ${altura}")
-
         }
         val ratio = width.toFloat() / height
         GLES20.glUniform2f(mWindowSizeUniformHandle,width.toFloat(),height.toFloat())
 
+        fractalResourcesResources?.regenAllTextures()
+
 /** toda vez que onSurfaceChanged é chamado, há destruição do contexto OpenCL, e portanto de todas as texturas*/
 /**como há persistência da fractalJanela, é preciso recriar todas as texturas*/
-        fractalResourcesResources!!.janela.run{
-            camadas.forEach { (t, camada) ->
-                camada.Celulas.forEachIndexed{i , colunas ->
-                    colunas.forEachIndexed(){j, linhas ->
-                        linhas.run{
-                //            solicitarGeracaoDeTexturaGL()
-                        }
-                    }
-                }
-            }
-            //poolTexturas.pool()
-        }
 
 
     }
