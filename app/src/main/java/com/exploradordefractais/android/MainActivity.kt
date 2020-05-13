@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     fun startExample01(view: View) {
        // val intent = Intent(this, Example01Activity::class.java)
 
-        startActivity(intent)        // Do something in response to button
+     //   startActivity(intent)        // Do something in response to button
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

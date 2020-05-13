@@ -44,7 +44,7 @@ class MyGLSurfaceView(context: Context, attrs:AttributeSet)  :
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         mScaleDetector.onTouchEvent(event)
-        myRenderer.fractalJanela?.modificarMagnificacaoCamera(scaleListener.mScaleFactor)
+        myRenderer. fractalResourcesResources!!.janela.modificarMagnificacaoCamera(scaleListener.mScaleFactor)
         scaleListener.mScaleFactor = 1f; // Reseta
         return if (detectorDeGestos.onTouchEvent(event)) {
             true
@@ -60,7 +60,7 @@ class MyGLSurfaceView(context: Context, attrs:AttributeSet)  :
         distanceY: Float
     ): Boolean {
         ////Log.d(DEBUG_TAG, "onScroll: $event1 $event2")
-        myRenderer.fractalJanela?.moverCamera(distanceX,distanceY)
+        myRenderer. fractalResourcesResources!!.janela.moverCamera(distanceX,distanceY)
         return true
     }
 

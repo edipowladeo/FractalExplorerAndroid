@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.os.SystemClock
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.exploradordefractais.poolDeObjetos.PoolDeObjetos
 import com.exploradordefractais.poolDeObjetos.PoolDeObjetosAlocaveis
@@ -32,7 +33,7 @@ import kotlin.math.truncate
  * somente caso esteja muito lento (profiling) seria a ultima coisa a fazer
   */
 @RequiresApi(Build.VERSION_CODES.N)
-class FractalJanela() : Parcelable, FractalJanelaPropriedades() {
+class FractalJanela(val resources:FractalResources) : FractalJanelaPropriedades() {
 
     var qtdeCelulas = 0;
 
@@ -100,9 +101,10 @@ class FractalJanela() : Parcelable, FractalJanelaPropriedades() {
     /** valores menores representam baixa resolucao, e são processados e desenhados primeiro e portanto ficam atrás*/
     var camadas: SortedMap<Int, Camada> = emptyMap<Int, Camada>().toSortedMap()
 
-    constructor(parcel: Parcel) : this() {}
+   // constructor(parcel: Parcel,resources: FractalResources) : this(resources) {}
 
     init {
+        Log.i("Janela","nova instancia !")
    //     texturaPlaceholder.populateByteArrayUsingDrawerFunction()
 //        TarefasAlocarTextura.add(velhaTarefaCriarTexturaGL(texturaPlaceholder))
 
@@ -197,9 +199,10 @@ class FractalJanela() : Parcelable, FractalJanelaPropriedades() {
                         val posicao = CoordenadasTela( //posicao de cada célula
                             coordenadasTelaJanela.x + (i+posicaorelativaI)*escalaX,
                             coordenadasTelaJanela.y + (j+posicaorelativaJ)*escalaY)
-                        if (this.possuiTexturaValida()) {
-                          if (this.flagMatrizIteracoesEstaAtualizada)  desenhista.desenharCelula(this,escalaX.toFloat(),posicao)
-                        }
+                        if (this.possuiTexturaValida())
+                     //     if (this.flagMatrizIteracoesEstaAtualizada)
+                              desenhista.desenharCelula(this,escalaX.toFloat(),posicao)
+
                     }
                 }
             }
@@ -241,7 +244,7 @@ class FractalJanela() : Parcelable, FractalJanelaPropriedades() {
 
     }
 
-      private fun adicionarRemoverCamadas()    {
+    private fun adicionarRemoverCamadas()    {
         val maiorvalor = log((1.0/(posicaoCameraAtual.Delta*minTamanhoAparentePixel)),2.0).toInt()
         val menorvalor = maiorvalor - quantidadeDeCamadasAlemDaPrincipal
 
@@ -304,7 +307,7 @@ class FractalJanela() : Parcelable, FractalJanelaPropriedades() {
     private fun getDeltaFromIntegerMagnification(mag:Int): TipoDelta {
        return pow(0.5,mag.toDouble())
     }
-
+/*
     //TODO: estudar a implementacao da interface parcelable, está aqui para injetar objeto via intent
     override fun writeToParcel(parcel: Parcel, flags: Int) {
 
@@ -316,13 +319,14 @@ class FractalJanela() : Parcelable, FractalJanelaPropriedades() {
 
     companion object CREATOR : Parcelable.Creator<FractalJanela> {
         override fun createFromParcel(parcel: Parcel): FractalJanela {
-            return FractalJanela(parcel)
+            return FractalJanela(parcel,null)
+            //TODO: consertar 
         }
 
         override fun newArray(size: Int): Array<FractalJanela?> {
             return arrayOfNulls(size)
         }
     }
-
+*/
 
 }

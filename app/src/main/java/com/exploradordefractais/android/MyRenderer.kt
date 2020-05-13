@@ -25,8 +25,7 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
         ouvinte = Ouvinte
     }
 
-    var fractalJanela: FractalJanela? = null
-    //  lateinit var janelaP: FractalJanela.Propriedades
+    var fractalResourcesResources: FractalResources? = null
 
     var mProgramHandle = 0
     var mTextureUniformHandle = 0
@@ -121,13 +120,13 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDrawFrame(gl: GL10?) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT or GLES20.GL_COLOR_BUFFER_BIT)
-        fractalJanela?.run {
+        fractalResourcesResources!!.janela.run {
             var tempoinicio = SystemClock.uptimeMillis()
             if (ExibirInformacoesDaJanelaEmOverlay) atualizarTexto();
 
             if(flagCameraEstaMovendo)atualizaCamadas();
             desenharCelulas(this@MyRenderer)
-           // Log.i("Tempo", "Render ${SystemClock.uptimeMillis()-tempoinicio} millisseconds")
+            // Log.i("Tempo", "Render ${SystemClock.uptimeMillis()-tempoinicio} millisseconds")
 
             /** Quando precisa executar uma TarefaPopularTexturaGL,
              *  é preciso verificar se a textura foi alocada*/
@@ -145,8 +144,7 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
 
 
             tarefasDesalocarTextura.run { for (i in 0 until size) poll()?.run()}
-            while ((tempototal<tempoMs) and (!tarefasAlocarTextura.isEmpty()))
-            {
+            while ((tempototal<tempoMs) and (!tarefasAlocarTextura.isEmpty())) {
                 tempototal = SystemClock.uptimeMillis() - tempoinicio
                 numTarefasRealizadas++
                 tarefasAlocarTextura.poll()?.run()
@@ -162,7 +160,7 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
     @RequiresApi(Build.VERSION_CODES.N)
     private fun atualizarTexto() {
         textoDebug.clear()
-        fractalJanela?.let {
+        fractalResourcesResources!!.janela.let {
             textoDebug.append(it.toString())
         }
      //   ouvinte?.recieveText(textoDebug.toString())
@@ -178,7 +176,7 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
         GLES20.glViewport(0, 0, width, height)
 
 
-        fractalJanela?.let{
+        fractalResourcesResources!!.janela.let{
         it.setDimensaoDaJanelaDeSaida(
             CoordenadasTela(
                 width.toDouble(),
@@ -193,17 +191,19 @@ public class MyRenderer(var context: Context) : GLSurfaceView.Renderer, Desenhis
 
 /** toda vez que onSurfaceChanged é chamado, há destruição do contexto OpenCL, e portanto de todas as texturas*/
 /**como há persistência da fractalJanela, é preciso recriar todas as texturas*/
-        fractalJanela?.run{
+        fractalResourcesResources!!.janela.run{
             camadas.forEach { (t, camada) ->
                 camada.Celulas.forEachIndexed{i , colunas ->
                     colunas.forEachIndexed(){j, linhas ->
                         linhas.run{
-                            solicitarGeracaoDeTexturaGL()
+                //            solicitarGeracaoDeTexturaGL()
                         }
                     }
                 }
             }
+            //poolTexturas.pool()
         }
+
 
     }
 

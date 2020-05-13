@@ -1,5 +1,6 @@
 package com.exploradordefractais
 
+import com.exploradordefractais.runnables.TarefaAlocarTexturas
 import com.exploradordefractais.runnables.TarefaPopularTexturaGL
 import com.exploradordefractais.runnables.TarefaProcessamento
 import java.util.concurrent.locks.ReentrantLock
@@ -51,11 +52,8 @@ class Celula(val camada: Camada, val coordenadasPlano: CoordenadasPlano, val tam
 
     /** usado caso o contexto opencl seja resetado*/
     fun solicitarGeracaoDeTexturaGL(){
-        camada.fractalJanela.tarefasPopularTextura.add(
-            TarefaPopularTexturaGL(
-                this
-            )
-        )
+        camada.fractalJanela.tarefasAlocarTextura.add(TarefaAlocarTexturas(this.textura))
+        camada.fractalJanela.tarefasPopularTextura.add(TarefaPopularTexturaGL(this))
     }
 
     fun ProcessaMandelbrotECriaTextura(){

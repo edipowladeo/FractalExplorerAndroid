@@ -30,14 +30,14 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
     var textView: TextView? = null
     lateinit var glview: MyGLSurfaceView
 
-    var fractalJanela: FractalJanela? = null
+    var resources = FractalResources()
 
     private lateinit var myGLSurfaceView: MyGLSurfaceView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //TODO: resolver bugs de orientaçao
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+      //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -45,7 +45,7 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         /** Cria o fractal*/
-        fractalJanela = FractalJanela()
+  //      fractalJanela = FractalJanela()
         //fractalJanela = intent.getParcelableExtra("fractalJanela")
 
         setContentView(R.layout.layout_new)
@@ -55,11 +55,11 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
         glview.myRenderer.setaOuvinte(this)
 
         /** injeta dependência da fractalJanela no myRenderer*/
-        glview.myRenderer.fractalJanela = fractalJanela
+        glview.myRenderer.fractalResourcesResources = resources
 
         /**cria threads de processamento */
         Log.i("Cores", getNumberOfCores().toString())
-        fractalJanela?.let { janela ->
+        resources.janela.let { janela ->
             /**IMPLEMENTAÇÃO 1: CLASSE QUE HERDA TRHEAD*/
             val threadProcessamento =
                 List<ThreadProcessamento>(4) { ThreadProcessamento(janela) }
@@ -169,7 +169,7 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
         lista_texturas.addAll(lista_texturas_local)
         ////Log.i("debug texturas ","lista tamanho  " + lista_texturas.size.toString())
         lista_texturas_local.forEach { tex ->
-            fractalJanela?.run {
+            resources.janela?.run {
                 lock.lock()
                 tarefasAlocarTextura.add(
                     TarefaAlocarTexturas(tex)
@@ -181,7 +181,7 @@ class ActivityExibirGLView() : CustomEventListener, AppCompatActivity() {
 
     fun desalocar(view: View) {
         lista_texturas.forEach { textura ->
-            fractalJanela?.run {
+            resources.janela?.run {
                 lock.lock()
                 tarefasDesalocarTextura.add(
                     TarefaDesalocarTexturaGL(

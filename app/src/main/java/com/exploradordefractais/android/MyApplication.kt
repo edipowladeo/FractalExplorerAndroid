@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 
 /** TODO FOR NEXT RELEASE:
- * TODO: BUG: Drawing empty cells at startup
+ * TODO: BUG: Realocating and populating Textures when losing opengl context
  * TODO: separate rendering, processing, erasing regions.
  */
 
